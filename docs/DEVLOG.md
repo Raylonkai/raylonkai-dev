@@ -1048,3 +1048,142 @@ Record the observed successful task 7 and keyboard navigation publication.
 ### Next steps
 
 - Publish this record, verify synchronization, and await the next selected task.
+
+## 2026-10-28 20:18 IST — Prepare Caddy static hosting and deployment guidance
+
+### Objective
+
+Complete task 8 by preparing a Caddy configuration and operational documentation
+for future self-hosting, without installing services, modifying system settings,
+opening public ports, or deploying the site.
+
+### Actions performed
+
+- Read `AGENTS.md`, package and Vite configuration, ignore rules, README,
+  architecture, and recent devlog entries; inspected repository files and status.
+  The working tree started clean.
+- Obtained actual Asia/Kolkata system times: 20:15 IST before work, 20:16 IST
+  while researching, and 20:18 IST before this final record.
+- Checked `command -v caddy`: no executable was available. Did not install or
+  download Caddy to work around the repository-only scope.
+- Reviewed official Caddy documentation for SPA patterns, file serving, request
+  matching, headers, automatic HTTPS, command-line validation, and Linux services.
+- Added the root Caddyfile and a deployment guide covering builds, proposed server
+  paths, permissions, DNS, HTTPS, ingress, future systemd integration, publication,
+  verification, asset retention, and rollback.
+- Updated README and architecture links to describe the prepared configuration
+  while distinguishing it from an actual deployment.
+- Formatted the changed Markdown files, ran formatting checks and a production
+  build, and checked documentation links, shell syntax, and artifact structure.
+- No dependencies were added, removed, or upgraded. No server commands from the
+  guide were executed; no application source changed.
+
+### Files changed
+
+- `Caddyfile`: domain, compression, access logging, nosniff header, separate retained
+  asset serving, cache policy, and static SPA fallback.
+- `docs/DEPLOYMENT.md`: future deployment/rollback procedure, server prerequisites,
+  verification expectations, sources, and explicit validation limitations.
+- `README.md`: future hosting entry point and accurate current scope.
+- `docs/ARCHITECTURE.md`: deployment boundaries and selected release/asset layout.
+- `docs/DEVLOG.md`: append actual work, technical decisions, checks, and final result.
+
+### Technical decisions
+
+- Use Caddy's public-hostname HTTPS behavior for `raylonkai.dev` without adding
+  unrelated hostnames, DNS-provider credentials, or a custom service unit.
+- Propose `/srv/raylonkai.dev/current` as an atomic symlink to a complete release.
+  Serve `/assets/*` from `/srv/raylonkai.dev/shared/assets/`, preserving old hashed
+  files so existing tabs and rollback clients can still request lazy chunks.
+- Keep asset requests outside the SPA fallback: missing asset files should remain
+  HTTP 404 rather than receiving HTML. Apply immutable caching only when the file
+  matcher finds an existing asset; revalidate HTML/unhashed public responses.
+- Document a shared-asset publication step before switching HTML, collision checks,
+  atomic file publication, serialized activation, and retention before pruning.
+- Document the distinction between the client-side 404 view and an HTTP 404;
+  unknown application paths under the SPA fallback return an HTTP 200 document.
+- Keep deployment ownership separate from Caddy read access. Describe future DNS,
+  firewall, router, certificate storage, and systemd requirements without changing them.
+- No user-facing behavior changed in the running application, so the changelog
+  remains unchanged; this preparation belongs in the engineering record.
+
+### Validation
+
+- `bun run format:check`: passed after targeted Markdown formatting.
+- `bun run build`: passed, including strict application, tooling, and test
+  typechecks. Existing four lazy chunks remain; main bundle is 230.45 kB
+  (72.92 kB gzip), unchanged from task 7.
+- Four documented shell blocks parsed successfully with `zsh -n` via stdin;
+  this checks shell syntax only and does not execute their commands.
+- Local links in README, architecture, and deployment documentation resolved.
+- Artifact inspection confirmed HTML-referenced assets exist, all four lazy route
+  chunks are present, and `dist/` contains no symlinks or environment files.
+- `git diff --check`: passed. Before appending, previous devlog bytes, package
+  configuration, Bun lockfile, and changelog matched HEAD.
+- ESLint, unit tests, and browser checks were not
+  repeated for this configuration/documentation-only task; their successful task 7
+  results remain recorded above. Prettier does not validate Caddy syntax.
+- Caddy formatting, adaptation, native validation, HTTP/cache behavior, missing-
+  asset status, DNS, TLS issuance, external connectivity, permissions on proposed
+  server paths, and systemd integration were not tested. Caddy is unavailable;
+  official documentation review is not a substitute for those native/live checks.
+- No services were installed or started, no public ports opened, no system files
+  edited, and no deployment performed.
+- The final append-only assertion initially failed: a repeated patch anchor had
+  inserted this new entry among older entries. Moved only the new entry to the end
+  after proving the remaining bytes exactly matched HEAD. Existing entries were
+  preserved; the corrected append-only and whitespace checks passed afterward.
+
+### Outstanding issues
+
+- The repository preparation is complete. Before deployment, run the documented
+  Caddy native checks on the chosen server and verify HTTP behavior and prerequisites.
+- The server, addresses, DNS records, certificate readiness, file ownership, and
+  public reachability are intentionally unconfigured/unverified in this task.
+- Changes remain uncommitted and unpushed; the previous handoff covered task 7.
+
+### Next steps
+
+- Task 8 preparation is complete. Await the user's selection; task 9 can review
+  accumulated documentation before task 10's final foundation validation.
+
+## 2026-10-28 20:21 IST — Prepare task 8 GitHub handoff
+
+### Objective
+
+Commit and push the Caddy template and deployment documentation as requested.
+
+### Actions performed
+
+- Read repository instructions, reviewed status, diffs and the Caddyfile, checked
+  the remote, and obtained actual system time in Asia/Kolkata.
+- Ran `git fetch origin` with approved access and compared branch history.
+- Checked the five intended files for common credential patterns and verified
+  generated output and private environment files remain ignored.
+
+### Files changed
+
+- `docs/DEVLOG.md`: this publication record. The intended commit includes the
+  Caddyfile, deployment guide, README, architecture update, and engineering history.
+
+### Technical decisions
+
+- Stage explicit reviewed paths; use existing `main` and `origin` without force.
+- Preserve the distinction between repository preparation and deployment. No
+  service, server configuration, application, or dependency changes are needed.
+
+### Validation
+
+- Fetch succeeded; branch comparison returned `0 0` before committing.
+- `git diff --check` and credential-pattern/ignore checks passed.
+- Task 8 checks already passed and were not repeated for this handoff. Native
+  Caddy validation remains pending because Caddy is not installed.
+- No commands failed during handoff preparation.
+
+### Outstanding issues
+
+- Commit and push are pending; record the observed result after publication.
+
+### Next steps
+
+- Commit and push the reviewed task 8 files, then record the outcome.

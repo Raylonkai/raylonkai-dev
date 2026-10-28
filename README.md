@@ -38,7 +38,8 @@ build and is intended for local verification, not production hosting.
 The site has five minimal pages, client-side navigation, a 404 view, and basic
 responsive styles. Linting, formatting, and navigation unit tests are configured.
 Optional Vim-style shortcuts are available alongside standard navigation.
-Deployment configuration remains a subsequent task. No backend is required.
+A Caddy template and deployment guide prepare future static hosting. No backend
+is required; the site has not been deployed by these setup tasks.
 
 `src/main.tsx` mounts React in strict mode and imports global styles. `src/App.tsx`
 selects page components through Wouter inside a shared `SiteLayout`.
@@ -75,8 +76,9 @@ pathname changes. Page components provide their content without another `<main>`
 Vite serves direct route requests during development and local preview. Future
 production hosting must serve `index.html` for application paths so direct links
 and refreshes reach the router. The 404 view is a client-side result: a static
-SPA fallback generally returns HTTP 200 even for unknown page paths. Caddy setup
-and deployment details remain a separate task.
+SPA fallback generally returns HTTP 200 even for unknown page paths. See the
+[deployment guide](docs/DEPLOYMENT.md) and root [Caddyfile](Caddyfile) for the
+prepared production fallback, asset retention, and validation requirements.
 
 ### Vim-style keyboard navigation
 
@@ -157,3 +159,16 @@ when selecting development or production settings.
 Read [AGENTS.md](AGENTS.md) before modifying the project. Engineering history
 is recorded in [docs/DEVLOG.md](docs/DEVLOG.md); user-facing changes appear in
 [CHANGELOG.md](CHANGELOG.md).
+
+## Future self-hosting
+
+`bun run build` creates static files in `dist/`. The Caddy template serves HTML
+through `/srv/raylonkai.dev/current` and hashed files through a retained shared
+asset store so old tabs and rollbacks can still load their chunks. These paths
+are proposed server conventions, not directories created by local development.
+
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) covers DNS, HTTPS, connectivity, service
+integration, release publication, verification, and rollback. Caddy is not installed
+in this environment, so native configuration validation and actual hosting checks
+remain pending. This repository task does not change services, firewall rules,
+DNS records, or public network exposure.

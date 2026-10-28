@@ -135,5 +135,9 @@ WebAssembly, graphics, or networking integrations when an experiment requires
 them, with decisions and browser constraints documented as they arise.
 
 Production hosting is intended to serve the static build through Caddy. That
-configuration, deployment workflow, and rollback guidance remain a separate task;
-this organization does not install services or change system networking.
+repository template and its operational procedures are now in [Caddyfile](../Caddyfile)
+and [DEPLOYMENT.md](DEPLOYMENT.md). A `current` symlink selects a complete release,
+while a shared hashed-asset store keeps older lazy chunks reachable after deployment
+and rollback. Asset requests bypass the SPA fallback. This is preparation only:
+native Caddy validation and actual server deployment remain pending, and no
+services or system networking have been changed.
