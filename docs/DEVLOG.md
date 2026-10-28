@@ -1187,3 +1187,43 @@ Commit and push the Caddy template and deployment documentation as requested.
 ### Next steps
 
 - Commit and push the reviewed task 8 files, then record the outcome.
+
+## 2026-10-28 20:22 IST — Confirm hosting preparation published
+
+### Objective
+
+Record the observed successful publication of task 8 repository files.
+
+### Actions performed
+
+- Staged the five reviewed files, checked staged whitespace, and committed as
+  `970b4a8` (`Prepare Caddy hosting and deployment rollback guidance`).
+- Ran `git push origin main`; GitHub accepted `d020983..970b4a8` on `main`.
+- Verified status and commit identities; obtained actual IST system time.
+- Appended this outcome for a follow-up documentation commit and push.
+
+### Files changed
+
+- `docs/DEVLOG.md`: actual task 8 commit and publication results.
+
+### Technical decisions
+
+- Record the observed successful push in a separate documentation commit without
+  rewriting history. Publishing repository files does not deploy the website.
+
+### Validation
+
+- Staged whitespace check, commit, and push succeeded without failures.
+- Working tree was clean after publication; HEAD and `origin/main` both resolved
+  to `970b4a8d8a01ba4b2504f57b1f74011304c5fcf8`.
+- Prior task 8 checks remain recorded above; no checks were repeated for this
+  documentation-only outcome entry. Native Caddy validation remains pending.
+
+### Outstanding issues
+
+- No issue remains with publishing these files. This outcome entry awaits its
+  own commit and push, to be confirmed in the final user report.
+
+### Next steps
+
+- Publish this outcome record, confirm synchronization, and await the next task.
