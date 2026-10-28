@@ -15,7 +15,7 @@
     "lint": "bun --bun eslint . --max-warnings 0",
     "format": "bun --bun prettier . --write",
     "format:check": "bun --bun prettier . --check",
-    "test": "bun test --pass-with-no-tests"
+    "test": "bun test"
   },
   "dependencies": {
     "react": "^19.3.1",

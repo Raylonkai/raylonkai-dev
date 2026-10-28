@@ -67,3 +67,19 @@ main {
 .skip-link:focus {
   transform: translateY(0);
 }
+
+.keyboard-controls {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.keyboard-controls p {
+  margin: 0.25rem 0 0;
+}
+
+kbd {
+  font-family: ui-monospace, monospace;
+  border: 1px solid #ccc;
+  border-radius: 0.2rem;
+  padding: 0.1em 0.3em;
+}

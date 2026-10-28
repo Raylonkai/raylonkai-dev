@@ -34,6 +34,26 @@ provide the initial accessibility baseline. The layout mirrors Wouter's default
 case-insensitive matching and optional single trailing slash for titles and
 active links. Canonical links use lowercase paths without a trailing slash.
 
+`src/lib/navigation.ts` owns the ordered navigation metadata and resolves a
+pathname to its canonical page. Exact matching with one optional trailing slash
+prevents unknown paths such as `//` or `/about//` from marking a page active.
+The layout uses this resolver for titles and active links, and keyboard navigation
+uses the same data for previous/next destinations.
+
+`src/hooks/useVimNavigation.ts` owns the keyboard subscription and cleans it up
+when disabled or unmounted. `src/lib/vim-navigation.ts` is the pure decision
+function tested without React or a DOM. `h/l` navigate to adjacent pages without
+wrapping, and `j/k` scroll 80 pixels without animation. Repeated page keys,
+modifiers, composition events, and previously handled events are ignored.
+
+The layout provides a visible enable/disable checkbox and key help. The setting
+is local React state, initially enabled, retained across client navigation and
+reset on document reload. Enabling focuses main. The hook protects interactive
+controls, selected text, shadow-DOM editors, fullscreen content, and containers
+marked `data-vim-ignore`. This lets future experiments own their keys without
+competing with site navigation. Standard links and keyboard traversal remain
+available when shortcuts are off.
+
 The pathless final route renders a 404 view with a home link. Static SPA hosting
 still needs an HTML fallback for direct requests; a client-side 404 view does not
 set an HTTP 404 status. See the [README route table](../README.md#routes-and-navigation).
@@ -43,7 +63,8 @@ There is no backend, database, authentication system, or global state library.
 
 ## Source responsibilities
 
-`src/pages/`, `src/components/layout/`, and `src/styles/` currently contain code.
+`src/pages/`, `src/components/layout/`, `src/styles/`, `src/hooks/`, and `src/lib/`
+currently contain code.
 The other locations below are conventions for future work, created when they
 have useful files. Do not add placeholder components or empty directories to
 match a diagram.
@@ -94,9 +115,10 @@ secrets in client-exposed variables.
 
 Colocate meaningful unit tests with the code they exercise using `*.test.ts`,
 `*.test.tsx`, `*.spec.ts`, or `*.spec.tsx`. Bun discovers tests under `src/`.
-There are no unit tests yet; remove the temporary `--pass-with-no-tests` script
-flag when the first meaningful tests are introduced. Rendering and browser
-interaction need suitable checks beyond pure algorithm tests.
+Navigation metadata and Vim action decisions have colocated unit tests. The test
+command fails if no tests are discovered. Browser checks separately verify real
+keyboard events, input protection, focus, scrolling, links, and history; unit
+tests do not establish those DOM behaviors.
 
 Use the commands in the [README](../README.md) for validation. ESLint checks code
 rules, TypeScript checks types, Prettier controls formatting, and Vite creates
@@ -106,7 +128,7 @@ component library, global state library, or browser-test dependency is installed
 ## Future extension points
 
 New routes can add page components in `App.tsx` and navigation/title entries in
-`SiteLayout.tsx` without changing React's entry point. Journal content can adopt
+`src/lib/navigation.ts` without changing React's entry point. Journal content can adopt
 a format when publishing requirements are known; no Markdown
 processor or content framework is selected yet. Labs can introduce workers,
 WebAssembly, graphics, or networking integrations when an experiment requires

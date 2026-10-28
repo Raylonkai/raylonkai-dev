@@ -36,9 +36,9 @@ build and is intended for local verification, not production hosting.
 ## Current scope
 
 The site has five minimal pages, client-side navigation, a 404 view, and basic
-responsive styles. Linting, formatting, and test-runner setup are configured.
-Meaningful unit tests and deployment configuration remain subsequent tasks.
-No backend is required.
+responsive styles. Linting, formatting, and navigation unit tests are configured.
+Optional Vim-style shortcuts are available alongside standard navigation.
+Deployment configuration remains a subsequent task. No backend is required.
 
 `src/main.tsx` mounts React in strict mode and imports global styles. `src/App.tsx`
 selects page components through Wouter inside a shared `SiteLayout`.
@@ -78,6 +78,32 @@ and refreshes reach the router. The 404 view is a client-side result: a static
 SPA fallback generally returns HTTP 200 even for unknown page paths. Caddy setup
 and deployment details remain a separate task.
 
+### Vim-style keyboard navigation
+
+The visible **Vim navigation** checkbox enables or disables single-letter
+shortcuts. It starts enabled and keeps its state across client-side page changes;
+reloading the document resets it to enabled. Enabling it focuses main content.
+
+| Key | Action                |
+| --- | --------------------- |
+| `h` | Previous page         |
+| `l` | Next page             |
+| `j` | Scroll down 80 pixels |
+| `k` | Scroll up 80 pixels   |
+
+Pages follow the navigation order: Home → About → Projects → Lab → Notes.
+There is no wrapping at either end; `h/l` do nothing on unknown routes. Holding
+`h/l` does not skip pages, while holding `j/k` continues scrolling without
+animation. Short pages may have no space to scroll.
+
+Shortcuts leave modified keys, text composition, selected text, and already-handled
+events alone. They pause in editable fields, links, buttons, other interactive
+controls, and fullscreen content. Future lab or editor containers can opt out
+with `data-vim-ignore`; editable controls inside shadow DOM are also protected.
+The switch remains available to disable shortcuts for speech input, assistive
+technology, or personal preference. Native links, Tab, Enter, and browser history
+continue to work independently of this feature.
+
 ## Engineering conventions
 
 ESLint uses flat configuration with recommended JavaScript, TypeScript, React
@@ -95,10 +121,13 @@ browser DOM; browser interaction tests will need a separate deliberate setup.
 `tsconfig.test.json` adds Bun types for tests while the application configuration
 keeps Bun globals out of browser code. Typechecking covers both environments.
 
-No unit tests exist yet. The test script temporarily uses `--pass-with-no-tests`
-so runner setup can be validated before task 7. Remove that flag when the first
-meaningful tests are added. A successful empty run provides no test coverage.
-Run `bun run test --coverage` when tests exist; coverage artifacts are ignored.
+`src/lib/navigation.test.ts` covers page metadata and unknown-path handling;
+`src/lib/vim-navigation.test.ts` covers page order, boundaries, scroll directions,
+repeat handling, modifiers, and composition safeguards. `bun run test` now fails
+if discovery unexpectedly finds no tests. Run `bun run test --coverage` for unit
+coverage; generated coverage artifacts are ignored. Pure unit tests do not prove
+DOM focus, scrolling, or typing behavior: verify those in a real browser when
+changing keyboard handling.
 
 Use relative imports for now: the current source layout does not benefit from
 aliases. Reassess when deeper modules make import paths cumbersome.

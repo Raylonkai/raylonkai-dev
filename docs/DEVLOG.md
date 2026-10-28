@@ -854,3 +854,157 @@ Record the observed successful routing and navigation publication.
 ### Next steps
 
 - Publish this record, confirm synchronization, and await the next selected task.
+
+## 2026-10-28 20:13 IST — Add meaningful unit tests and Vim-style navigation
+
+### Objective
+
+Complete task 7 with repeatable tests for actual navigation behavior and implement
+the user's additional request for hjkl site navigation. The user explicitly
+selected h/l for previous/next pages and j/k for scrolling down/up.
+
+### Actions performed
+
+- Read `AGENTS.md`, layout, routes, styles, configurations, README, architecture,
+  and recent devlog entries; checked Git status. The working tree started clean.
+- Observed actual Asia/Kolkata system times at 20:08 IST before work, 20:09 IST
+  during initial tests, and 20:13 IST before this final record.
+- Asked for the intended hjkl mapping and used the user's chosen answer.
+- Consulted W3C's [character-key shortcut guidance](https://www.w3.org/WAI/WCAG22/Understanding/character-key-shortcuts.html)
+  and MDN's [composition-event](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/isComposing)
+  and [ancestor-matching](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest)
+  references to support accessible disabling and typing safeguards.
+- Extracted navigation metadata and exact page lookup into a real utility used
+  by the layout. Fixed double-slash root paths incorrectly receiving Home metadata.
+- Added pure Vim action decisions, a keyboard subscription hook with cleanup,
+  a visible enable/disable checkbox, and concise on-page key help.
+- Added colocated Bun unit tests and removed `--pass-with-no-tests` from the test
+  script so unexpectedly empty test discovery fails.
+- Formatted source and documentation and ran all configured checks.
+- Started temporary loopback development/preview servers and isolated headless
+  Firefox with approved access. Extended the temporary `/tmp` browser script
+  to check real keyboard actions, scrolling, input guards, and the switch.
+- Stopped both servers and the browser via Ctrl+C after both smoke runs passed.
+- No dependencies were added, removed, or upgraded; `bun.lock` is unchanged.
+
+### Files changed
+
+- `src/lib/navigation.ts`: ordered navigation metadata and canonical page lookup.
+- `src/lib/navigation.test.ts`: known pages, case/trailing-slash variants, and
+  unknown/malformed paths.
+- `src/lib/vim-navigation.ts`: pure shortcut decisions for navigation and scrolling.
+- `src/lib/vim-navigation.test.ts`: adjacent destinations, boundaries, key repeat,
+  modifiers, composition, handled events, scroll direction, and unsupported keys.
+- `src/hooks/useVimNavigation.ts`: DOM-aware event subscription and safeguards.
+- `src/components/layout/SiteLayout.tsx`: shared metadata, hook integration,
+  visible shortcut control, and key help.
+- `src/styles/global.css`: small control/help and kbd styles.
+- `package.json`: strict `bun test` script without empty-suite allowance.
+- `README.md`, `docs/ARCHITECTURE.md`: key mapping, settings lifetime, test scope,
+  experiment opt-out convention, and updated source responsibilities.
+- `CHANGELOG.md`: user-facing shortcuts and malformed-path metadata correction.
+- `docs/DEVLOG.md`: append actual work, failures, decisions, and final results.
+
+### Technical decisions
+
+- Follow Home, About, Projects, Lab, Notes order for h/l; do not wrap at the ends
+  or infer an adjacent page on unknown routes. Ignore repeated h/l to avoid
+  skipping pages when a key is held. Allow repeated j/k for continued 80px scrolling.
+- Use instant scrolling without animation, including for reduced-motion users.
+- Enable shortcuts initially but provide an always-available native checkbox to
+  turn them off. Retain the state across client navigation without introducing
+  persistence or global state; reload resets it. Enabling focuses main content.
+- Ignore modified keys, composition, handled events, text selection, fullscreen
+  content, interactive controls, and editable content, including shadow DOM.
+  Reserve `data-vim-ignore` for future experiment/editor containers that own keys.
+- Keep key-decision logic independent of React and the DOM for meaningful unit
+  coverage. Verify actual typing/focus/scroll behavior separately in Firefox.
+- Use exact canonical matching plus a single optional trailing slash; removing
+  a slash before matching incorrectly turned `//` into Home in the previous layout.
+- Keep unit tests within Bun's existing runner; add no browser automation dependency.
+
+### Validation
+
+- Initial metadata unit invocation passed 13 tests. Subsequent typechecking
+  failed twice with TS2769 because parameterized expected values widened to
+  strings while metadata retained literal types. Resolved by preserving test
+  tuples with `as const` and asserting the expected label and href separately.
+- Final `bun run typecheck`: passed for browser, tooling, and test configurations.
+- Final `bun run lint`: passed with zero warnings.
+- Final `bun run test`: 46 passed, 0 failed, 73 assertions across two files.
+- Targeted Prettier formatting and `bun run format:check`: passed.
+- `bun run build`: passed; four lazy route chunks remain, main JavaScript is
+  230.45 kB (72.92 kB gzip), and CSS is 0.94 kB.
+- Firefox smoke checks passed against both development and production preview:
+  existing routes, direct URLs, browser history, lazy loading, active links,
+  document titles, keyboard skip link, main focus, and 404 return-home behavior.
+- Real keyboard events verified h/l destinations, main focus, j/k scrolling by
+  80px, no page wrapping, and no navigation on unknown routes. Production preview
+  additionally verified the `//` 404 metadata regression directly.
+- Real typing remained intact in inputs, textarea, contenteditable, ARIA controls,
+  links, buttons, select, canvas, a `data-vim-ignore` container, and a shadow input.
+  Modifier, composition, repeated-page-key, handled-event, and selected-text checks
+  also passed. Some event-state checks used synthetic events within the real browser.
+- Keyboard activation of the checkbox disabled shortcuts; re-enabling focused
+  main and restored navigation. Home at 360px had no horizontal overflow; inspected
+  the screenshot with the visible switch and help text.
+- Neither smoke run recorded application JavaScript errors. Firefox emitted
+  headless graphics/telemetry and shutdown channel diagnostics; both automation
+  runs completed successfully. All three processes stopped with expected code 130.
+- `git diff --check` passed. Previous devlog bytes and the lockfile were unchanged
+  before appending this record. No application unit/browser failures remain.
+
+### Outstanding issues
+
+- No blocking issues for task 7 or the requested keyboard feature. Fullscreen
+  suppression is implemented but was not exercised in the headless smoke checks.
+- Screen-reader behavior, other browser engines, and every possible future
+  custom widget are not comprehensively audited. Future interactive labs should
+  opt out where they own keyboard input and verify their own behavior.
+- Changes remain uncommitted and unpushed; the previous GitHub handoff covered task 6.
+
+### Next steps
+
+- Task 7 and the chosen hjkl mapping are complete. Await the next selection;
+  recommended task 8 prepares Caddy static hosting and deployment documentation.
+
+## 2026-10-28 20:14 IST — Prepare task 7 and Vim navigation publication
+
+### Objective
+
+Commit and push the completed tests and keyboard navigation as explicitly requested.
+
+### Actions performed
+
+- Read repository instructions, reviewed modified/new source and tests, checked
+  Git status and the remote, and obtained actual system time in Asia/Kolkata.
+- Ran `git fetch origin` with approved access and compared branch history.
+- Reviewed the 12 intended files for private keys and common credential patterns;
+  verified generated output and local environment files remain ignored.
+
+### Files changed
+
+- `docs/DEVLOG.md`: this handoff record. The commit includes the task 7 source,
+  tests, script change, styles, and documentation listed in the preceding entry.
+
+### Technical decisions
+
+- Stage explicit reviewed paths; use existing `main` and `origin` without force.
+- Preserve unrelated files and Git history. No additional code or dependency
+  changes are needed for publication.
+
+### Validation
+
+- Fetch succeeded; branch comparison returned `0 0` before committing.
+- `git diff --check` and credential-pattern/ignore checks passed.
+- The previous task's 46 unit tests and application/browser checks already passed;
+  unchanged checks were not repeated for this handoff.
+- No commands failed during preparation.
+
+### Outstanding issues
+
+- Commit and push are pending; record their actual result after publication.
+
+### Next steps
+
+- Commit and push the reviewed task 7 and Vim navigation changes.

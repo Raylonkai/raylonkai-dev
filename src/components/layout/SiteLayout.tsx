@@ -1,21 +1,17 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
-
-const navigation = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/lab', label: 'Lab' },
-  { href: '/notes', label: 'Notes' },
-];
+import { useVimNavigation } from '../../hooks/useVimNavigation';
+import { getNavigationItem, navigation } from '../../lib/navigation';
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
-  const [location] = useLocation();
-  const path = location.replace(/\/$/, '').toLowerCase() || '/';
-  const title =
-    navigation.find(({ href }) => href === path)?.label ?? 'Page not found';
+  const [location, navigate] = useLocation();
+  const [vimEnabled, setVimEnabled] = useState(true);
+  const currentPage = getNavigationItem(location);
+  const title = currentPage?.label ?? 'Page not found';
   const main = useRef<HTMLElement>(null);
   const previousLocation = useRef(location);
+
+  useVimNavigation(vimEnabled, location, navigate);
 
   useEffect(() => {
     document.title = `${title} | raylonkai.dev`;
@@ -42,7 +38,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
               <li key={href}>
                 <Link
                   href={href}
-                  aria-current={path === href ? 'page' : undefined}
+                  aria-current={currentPage?.href === href ? 'page' : undefined}
                 >
                   {label}
                 </Link>
@@ -50,6 +46,25 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
             ))}
           </ul>
         </nav>
+        <div className="keyboard-controls">
+          <label>
+            <input
+              type="checkbox"
+              checked={vimEnabled}
+              aria-describedby="vim-help"
+              onChange={(event) => {
+                setVimEnabled(event.target.checked);
+                if (event.target.checked) main.current?.focus();
+              }}
+            />{' '}
+            Vim navigation
+          </label>
+          <p id="vim-help">
+            <kbd>h</kbd>/<kbd>l</kbd>: previous/next page. <kbd>j</kbd>/
+            <kbd>k</kbd>: scroll down/up. Active outside controls; no page
+            wrapping.
+          </p>
+        </div>
       </header>
       <main id="main-content" ref={main} tabIndex={-1}>
         {children}
