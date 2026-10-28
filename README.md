@@ -39,10 +39,16 @@ The starter renders one minimal page. Linting, formatting, and test-runner setup
 are configured. Routing, styling, meaningful unit tests, and deployment
 configuration remain subsequent tasks. No backend is required.
 
-`src/main.tsx` mounts React in strict mode; `src/App.tsx` contains the starter
-view. `tsconfig.json` checks browser code, while `tsconfig.node.json` separately
+`src/main.tsx` mounts React in strict mode; `src/App.tsx` composes the application
+and renders the starter view from `src/pages/Home.tsx`.
+`tsconfig.json` checks browser code, while `tsconfig.node.json` separately
 checks Vite configuration with Node-compatible tooling types. Vite performs
 bundling; TypeScript checks types without emitting files.
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for source responsibilities,
+component conventions, and guidance for adding experiments and journal content.
+Folders are created when real code needs them; the documented layout does not
+require empty scaffolding.
 
 ## Engineering conventions
 

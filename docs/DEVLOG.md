@@ -497,3 +497,124 @@ Record the observed successful publication of the development tooling changes.
 ### Next steps
 
 - Publish this record, verify synchronization, and await the next selected task.
+
+## 2026-10-28 19:51 IST — Establish source architecture and page ownership
+
+### Objective
+
+Complete task 5 by separating the starter page from application composition and
+documenting clear locations for future features, without changing the rendered
+website or implementing routing and shared navigation from task 6.
+
+### Actions performed
+
+- Read `AGENTS.md`, source, configurations, README, and recent devlog entries;
+  inspected repository files and Git status. The working tree started clean.
+- Obtained actual system timestamps in Asia/Kolkata: 19:50 IST before the change
+  and 19:51 IST before recording the final result.
+- Captured the original App's static React markup in a uniquely named temporary
+  file under `/tmp` for a before/after comparison.
+- Moved the starter content into `src/pages/Home.tsx` and made `src/App.tsx`
+  compose that page through a direct relative import.
+- An initial partial patch left the old return block in App and an incomplete
+  Home component. Immediate source inspection caught this intermediate editing
+  error; completed the move before running checks.
+- Documented present structure, future folder responsibilities, component and
+  import conventions, experiment boundaries, and extension points.
+- Formatted affected files with `bun --bun prettier README.md docs/ARCHITECTURE.md
+  src/App.tsx src/pages/Home.tsx --write`, then ran all configured checks.
+- Temporarily started `bun run dev` on loopback using approved access because
+  previous sandbox runs blocked listening sockets. Checked HTTP responses with
+  approved Python `urllib.request` access, then stopped the server via Ctrl+C.
+
+### Files changed
+
+- `src/pages/Home.tsx`: owns the unchanged starter page content and main landmark.
+- `src/App.tsx`: composes Home instead of containing its page markup.
+- `docs/ARCHITECTURE.md`: current application flow, source responsibilities, and
+  conventions for adding real modules without empty scaffolding.
+- `README.md`: updated entry-point explanation and architecture documentation link.
+- `docs/DEVLOG.md`: append this task's decisions, actual checks, and final result.
+
+### Technical decisions
+
+- Create only the directory needed for a real page; document other planned
+  locations until useful layout, UI, labs, hooks, utilities, content, or assets exist.
+- Keep relative imports and direct page exports. Add no framework, router,
+  shared component abstraction, state library, or dependencies for this refactor.
+- Explain the future distinction between independent experiment logic and React
+  presentation without introducing a speculative experiment framework.
+- Keep Home responsible for the main landmark for now; document that a future
+  layout must avoid duplicate main landmarks if it takes ownership.
+- No user-facing behavior changed, so no changelog entry is required. Package
+  configuration, dependency versions, and lockfile remain unchanged.
+
+### Validation
+
+- `bun run typecheck`: passed for browser, tooling, and test environments.
+- `bun run lint`: passed with zero warnings.
+- `bun run format:check`: passed after targeted formatting.
+- `bun run test`: exited successfully and reported `No tests found!`; no unit
+  tests ran and no coverage is claimed.
+- `bun run build`: passed; 16 modules transformed, JavaScript output 219.86 kB
+  (68.74 kB gzip) in `dist/`.
+- One-off React static rendering comparison passed: App's before/after HTML
+  matched exactly, including the main landmark, heading, and both paragraphs.
+- Development startup passed at `http://127.0.0.1:5173`. The document, App module,
+  and moved Home module returned HTTP 200 with expected content; App's transformed
+  module referenced the new Home path.
+- Browser interaction and visual checks were not run. HTTP checks and static
+  rendering do not establish browser behavior; no client-side routing exists yet.
+- Server stopped with expected exit code 130. `git diff --check` passed and status
+  showed only intended source/document changes before this log append.
+- No validation commands failed; the intermediate editing issue was corrected
+  during source inspection before validation.
+
+### Outstanding issues
+
+- No blocking issues for task 5. Meaningful unit tests still belong to task 7;
+  routing, navigation, additional views, and 404 handling remain task 6.
+- Changes are uncommitted and unpushed; the previous GitHub handoff covered task 4.
+
+### Next steps
+
+- Task 5 is complete. Await the user's next selection; recommended task 6 is
+  routing, accessible navigation, lazy page loading where useful, and a 404 view.
+
+## 2026-10-28 19:52 IST — Prepare task 5 GitHub handoff
+
+### Objective
+
+Commit and push the source architecture changes following explicit user authorization.
+
+### Actions performed
+
+- Read repository instructions, reviewed the five changed or new files, and
+  checked status, diffs, the configured remote, and actual system time in IST.
+- Ran `git fetch origin` with approved access and compared branch history.
+- Checked the intended files for private keys and common credential patterns.
+
+### Files changed
+
+- `docs/DEVLOG.md`: this handoff record. The commit also includes the task 5
+  README update, App refactor, Home component, and architecture document.
+
+### Technical decisions
+
+- Stage only the five reviewed task 5 paths and use the existing `main` branch.
+- Push to `origin/main` without force; keep dependencies and generated files excluded.
+
+### Validation
+
+- Fetch and `git diff --check` succeeded. Branch comparison returned `0 0`.
+- No common credential patterns were found in the intended files.
+- Prior task 5 checks passed; unchanged application checks were not repeated.
+- No unit tests exist, as documented in task 5. No commands failed during preparation.
+
+### Outstanding issues
+
+- Commit and push are pending. Record their actual outcome after publication.
+
+### Next steps
+
+- Commit and push task 5, then record the verified result.
