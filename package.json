@@ -1,0 +1,28 @@
+{
+  "name": "raylonkai-dev",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "bun": ">=1.4.4"
+  },
+  "scripts": {
+    "dev": "bun --bun vite",
+    "build": "bun run typecheck && bun --bun vite build",
+    "preview": "bun --bun vite preview",
+    "typecheck": "bun --bun tsc --noEmit && bun --bun tsc --noEmit -p tsconfig.node.json"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}
