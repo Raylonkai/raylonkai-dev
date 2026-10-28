@@ -306,3 +306,154 @@ Record the completed GitHub handoff and its actual result.
 
 - Publish this outcome entry, confirm a clean synchronized branch, and await the
   next selected development task.
+
+## 2026-10-28 19:41 IST — Configure development tooling and environment conventions
+
+### Objective
+
+Complete task 4 with ESLint, Prettier, Bun test discovery, typed public environment
+variables, remaining scripts, and updated developer documentation. Preserve the
+selected scope: meaningful sample tests remain task 7 and routing remains task 6.
+
+### Actions performed
+
+- Read `AGENTS.md`, existing configurations, README, and recent devlog entries;
+  inspected source files and `git status --short --branch`. The working tree
+  started clean on `main`, synchronized with `origin/main`.
+- Read actual system time using `TZ=Asia/Kolkata date`: 19:37 IST before work,
+  19:40 IST during validation, and 19:41 IST before this final record.
+- Consulted official documentation for
+  [typescript-eslint](https://typescript-eslint.io/getting-started/),
+  [Prettier](https://prettier.io/docs/install),
+  [Bun test configuration](https://bun.sh/docs/test/configuration), and
+  [Vite environment variables](https://vite.dev/guide/env-and-mode).
+- Queried stable package versions and peer dependencies with `bun info` using
+  approved registry access, given the previously observed sandbox DNS restriction.
+- Ran `bun add --dev` for ESLint 10.13.0, `@eslint/js` 10.0.1,
+  `typescript-eslint` 8.72.1, `eslint-plugin-react-hooks` 7.1.1,
+  `eslint-plugin-react-refresh` 0.5.7, `eslint-config-prettier` 10.1.8,
+  `globals` 17.13.0, `@types/bun` 1.4.4, and TypeScript 6.0.3.
+- Ran `bun add --dev --exact prettier@3.9.10`. Updated the Bun lockfile;
+  runtime dependencies were unchanged and no other package-manager lockfile was added.
+- Added scripts, flat lint configuration, formatter rules and ignores, Bun test
+  discovery, test typechecking, typed public environment declarations, and an example.
+- Ran the new checks, applied `bun run format`, and reran validation.
+
+### Files changed
+
+- `package.json` and `bun.lock`: tooling dependencies, TypeScript compatibility
+  adjustment, and all eight requested scripts.
+- `eslint.config.js`: recommended JavaScript, TypeScript, Hooks, and Fast Refresh
+  rules with browser/tooling globals, artifact ignores, and Prettier compatibility.
+- `.prettierrc.json`: single quotes and trailing commas.
+- `.prettierignore`: artifact, lockfile, environment-owned directory, and append-only
+  devlog exclusions.
+- `bunfig.toml`: test discovery rooted at `src/`.
+- `tsconfig.json` and `tsconfig.test.json`: separate browser and Bun test type
+  environments; test configuration includes source until test files are added.
+- `src/vite-env.d.ts` and `.env.example`: strict environment key declarations
+  and optional public `VITE_SITE_URL` placeholder, not consumed by the UI yet.
+- `.gitignore`: coverage output exclusion.
+- `README.md`: all commands, tests, compatibility decisions, aliases, formatting,
+  environment conventions, and remaining scope.
+- `src/App.tsx`: formatting only; the production bundle remained unchanged.
+- `docs/DEVLOG.md`: append this task record without modifying prior entries.
+
+### Technical decisions
+
+- Downgrade TypeScript from 7.0.2 to stable 6.0.3: installed stable
+  `typescript-eslint` declares support for TypeScript >=4.8.4 and <6.1.0.
+  Pin newly selected tooling versions and upgrade compatible tools together.
+- Keep formatting in Prettier, with conflicting ESLint rules disabled; lint
+  warnings fail the script. Use standard recommended lint rules without adding
+  project-service complexity at this stage.
+- Use Bun's built-in runner without a DOM library or separate test framework.
+  Temporarily permit an empty suite with `--pass-with-no-tests` until task 7;
+  explicitly document that a successful empty invocation provides no test coverage.
+- Do not introduce path aliases: current relative imports are short and clear.
+- Keep Bun types out of the browser type environment. Add explicit typed public
+  variable keys, account for absent optional values, and document that runtime
+  validation belongs where values are consumed.
+- Keep environment values optional for local startup; `.env.example` contains
+  no secrets and is trackable. Document client exposure, build-time values, and
+  Bun's environment preloading behavior.
+- Exclude the permanent devlog from format mutations to preserve history. No
+  user-facing behavior changed, so no new changelog entry was needed.
+
+### Validation
+
+- Initial `bun run lint` and `bun run typecheck`: passed.
+- Initial `bun run format:check`: failed, identifying `eslint.config.js`, README,
+  `src/App.tsx`, and `tsconfig.json`. Resolved with `bun run format`.
+- Final `bun run format:check`: passed; `bun run format` executed successfully.
+- Final `bun run lint`: passed with zero warnings. An additional in-memory ESLint
+  probe detected invalid conditional Hook usage and confirmed active TypeScript
+  unused-variable and Fast Refresh rules, without writing a fixture to the repository.
+- Final `bun run typecheck`: passed for browser, tooling, and test configurations
+  using supported TypeScript 6.0.3.
+- `bun run test`: exited successfully and explicitly reported `No tests found!`.
+  No project unit tests ran, and no test coverage is claimed.
+- `bun run build`: passed, including all typechecks; bundle remained
+  `index-D3XlOMs5.js`, 219.83 kB (68.73 kB gzip).
+- `bun install --frozen-lockfile`: passed, checked 164 installs with no changes.
+- `git diff --check`: passed. Git ignore checks confirmed dependencies, production
+  output, coverage output, and `.env.local` are ignored while `.env.example` is not.
+- Compared previous devlog bytes against `HEAD` before appending: unchanged.
+- Local server and browser checks were not repeated: this task made no functional
+  UI or routing changes, and the production bundle matched task 3.
+
+### Outstanding issues
+
+- No blocking issues for task 4. Unit tests still need meaningful cases in task 7;
+  remove the temporary empty-suite allowance then.
+- Environment runtime validation will be required when variables are consumed.
+- Changes remain uncommitted and unpushed; the earlier GitHub handoff covered
+  the previously completed foundation.
+
+### Next steps
+
+- Task 4 is complete. Await the user's selection; recommended task 5 is source
+  architecture, creating directories only as needed for real modules.
+
+## 2026-10-28 19:43 IST — Prepare task 4 commit and push
+
+### Objective
+
+Publish the completed development tooling changes following the user's explicit
+instruction to commit and push.
+
+### Actions performed
+
+- Read repository instructions and reviewed status, diffs, new configurations,
+  the public environment example, and the configured GitHub remote.
+- Obtained the timestamp from the system clock in Asia/Kolkata.
+- Ran `git fetch origin` with approved access and compared local and remote
+  history with `git rev-list --left-right --count HEAD...origin/main`.
+- Checked changed files for private keys and common credential patterns.
+- Prepared explicit staging of the 14 task 4 files, excluding generated output
+  and local environment files.
+
+### Files changed
+
+- `docs/DEVLOG.md`: append this Git handoff record; other pending changes are
+  the task 4 files documented in the preceding entry.
+
+### Technical decisions
+
+- Commit to the existing `main` branch and push to `origin/main` without force.
+- Keep this handoff limited to the previously validated tooling changes.
+
+### Validation
+
+- Fetch succeeded; history comparison returned `0 0` before committing.
+- `git diff --check` and the changed-file credential-pattern check passed.
+- Task 4 validation already passed; unchanged application checks were not repeated.
+- The configured test command still has no tests, as recorded above.
+
+### Outstanding issues
+
+- Commit and push are pending; their actual result will be recorded afterward.
+
+### Next steps
+
+- Commit the reviewed tooling changes, push them, and record the outcome.

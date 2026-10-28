@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+bun.lock
+.agents/
+.codex/
+.aws/
+# Preserve the append-only engineering history verbatim.
+docs/DEVLOG.md
