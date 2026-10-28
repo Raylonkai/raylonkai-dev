@@ -658,3 +658,159 @@ Record the observed successful task 5 commit and push.
 ### Next steps
 
 - Publish this record, confirm branch synchronization, and await the next task.
+
+## 2026-10-28 20:00 IST — Add routing, accessible navigation, and minimal views
+
+### Objective
+
+Complete task 6 with Home, About, Projects, Lab, and Notes routes, shared semantic
+navigation, useful route-level lazy loading, minimal styles, and an unknown-route
+404 view. Verify real browser behavior without implementing a finished visual
+design or the future unit-test task.
+
+### Actions performed
+
+- Read `AGENTS.md`, existing source, package configuration, architecture, and
+  recent history; inspected status and applicable repository files. The working
+  tree started clean on `main`.
+- Obtained actual system timestamps in Asia/Kolkata: 19:55 IST before work,
+  19:56 IST during setup, and 20:00 IST before this record.
+- An initial tool-orchestration script had an extra closing parenthesis and
+  failed with `SyntaxError` before executing commands. Corrected and reran it.
+- Consulted the official [Wouter repository](https://github.com/molefrog/wouter),
+  [React lazy reference](https://react.dev/reference/react/lazy), and Mozilla's
+  [WebDriver BiDi connection guide](https://developer.mozilla.org/en-US/docs/Web/WebDriver/How_to/Create_BiDi_connection).
+  Direct Firefox source-documentation and W3C spec fetches failed; the Mozilla
+  guide supplied the supported browser automation connection method.
+- Queried `bun info wouter version` and peer dependencies with approved network
+  access; installed Wouter 3.13.0 with `bun add wouter@3.13.0` (three packages).
+- Added routes, four lazy imports, a loading status, shared layout, minimal page
+  content, global CSS, and a 404 return-home link.
+- Matched navigation/title normalization to Wouter's case-insensitive route
+  matching and single optional trailing slash; verified unusual paths in Firefox.
+- Updated user-facing and architectural documentation, then ran configured checks.
+- Started loopback Vite development and preview servers with approved access.
+- Used installed Firefox 158.0.1 in headless mode with a temporary isolated
+  `/tmp` profile and loopback WebDriver BiDi automation. No browser/test packages
+  were added. A one-off `/tmp` script checked development and production preview.
+- Stopped both servers and the temporary browser via Ctrl+C after verification.
+
+### Files changed
+
+- `package.json`, `bun.lock`: Wouter 3.13.0 and its resolved dependencies.
+- `src/App.tsx`: five routes, eager Home/404 imports, lazy secondary pages,
+  `Suspense` loading status, and final unknown-path fallback.
+- `src/components/layout/SiteLayout.tsx`: header, primary navigation, skip link,
+  single main landmark, page titles, active links, and navigation focus/scroll handling.
+- `src/pages/Home.tsx`: retain content while removing its duplicate main wrapper.
+- `src/pages/About.tsx`, `Projects.tsx`, `Lab.tsx`, `Notes.tsx`: minimal route views
+  with no fabricated biography, projects, experiments, or journal entries.
+- `src/pages/NotFound.tsx`: explicit 404 message and client-side home link.
+- `src/styles/global.css`, `src/main.tsx`: shared responsive basics and stylesheet import.
+- `README.md`, `docs/ARCHITECTURE.md`: actual routes, layout ownership, loading,
+  accessibility behavior, extension conventions, and static-host fallback limits.
+- `CHANGELOG.md`: user-facing route, navigation, loading, and accessibility additions.
+- `docs/DEVLOG.md`: append this actual activity record and final result.
+
+### Technical decisions
+
+- Choose Wouter for a small client-side routing API compatible with the installed
+  React version (declared peer requirement React >=16.8.0).
+- Load Home and the tiny 404 immediately. Defer secondary views with module-level
+  React `lazy` imports so shared navigation remains mounted while content loads.
+- Use native links, `aria-current`, visible focus indicators, a keyboard skip
+  link, and one layout-owned main landmark. Move focus and scroll after pathname
+  changes, without forcing focus on initial document load.
+- Keep views simple and avoid component libraries, global state, content engines,
+  backend systems, or deployment infrastructure.
+- Document static SPA behavior accurately: the router's 404 view does not set
+  an HTTP 404 response. Production direct links need an HTML fallback; Caddy
+  configuration remains task 8.
+- Keep browser smoke automation temporary rather than adding a browser-test stack
+  before requirements justify it. Project unit tests remain task 7.
+
+### Validation
+
+- `bun run typecheck`, `bun run lint`, `bun run format:check`: passed after
+  targeted Prettier formatting. All checks were rerun after the final source change.
+- `bun run test`: exited successfully and reported `No tests found!`; no Bun
+  project unit tests ran and no unit-test coverage is claimed.
+- `bun run build`: passed, transformed 32 modules, and emitted four separate
+  secondary-page chunks, CSS, and a 228.68 kB main JavaScript bundle (72.27 kB gzip).
+- `bun install --frozen-lockfile`: passed, checked 167 installs with no changes.
+- Both development and production-preview Firefox smoke runs passed: all five
+  routes rendered, each had one main landmark and one h1, titles and active
+  links matched, and client transitions preserved the same document.
+- Verified keyboard Tab reveals the first skip link and Enter focuses main;
+  route transitions focus main; browser Back/Forward restores the expected views.
+- Verified direct requests, uppercase/single-trailing-slash matching,
+  query/hash URLs, unknown paths, unknown nested paths, malformed double trailing
+  slashes, and the 404 home link in both runs.
+- Browser resource timings confirmed secondary modules were absent on initial
+  Home load and requested after navigation, for development and built assets.
+- Verified no horizontal overflow on Home at 360px and inspected its screenshot.
+  Neither browser run recorded application JavaScript errors. This is not a
+  comprehensive accessibility or cross-browser audit; no screen reader was tested.
+- Firefox emitted headless graphics and telemetry/background warnings, including
+  a failed telemetry upload and channel-exit messages during shutdown. These
+  were browser-process diagnostics; both page automation runs completed successfully.
+- All three temporary processes stopped with expected exit code 130. No system
+  service, firewall rule, or publicly exposed port was configured.
+- `git diff --check` passed; generated/private files remained ignored. Compared
+  the previous devlog against HEAD before appending: unchanged.
+
+### Outstanding issues
+
+- No blocking issue remains for task 6. Unit tests, production Caddy fallback,
+  and fuller real content remain future tasks.
+- Dynamic imports depend on successful asset delivery; production deployment
+  and rollback planning must account for clients requesting older chunks.
+- Changes remain uncommitted and unpushed; the previous handoff covered task 5.
+
+### Next steps
+
+- Task 6 is complete. Await the next selection; recommended task 7 is meaningful
+  unit coverage and removal of the temporary empty-suite allowance.
+- Launch locally with `bun run dev` and open `http://127.0.0.1:5173`.
+
+## 2026-10-28 20:04 IST — Prepare task 6 GitHub handoff
+
+### Objective
+
+Commit and push the completed routing and navigation changes as explicitly requested.
+
+### Actions performed
+
+- Read `AGENTS.md`, reviewed diffs and new source files, and checked Git status,
+  the remote, file list, and actual system time in Asia/Kolkata.
+- Ran `git fetch origin` with approved access and compared branch history.
+- Checked all 16 changed or new files for private keys and common credential
+  patterns, and verified generated/private paths remain ignored.
+
+### Files changed
+
+- `docs/DEVLOG.md`: append this publication record. The intended commit includes
+  the task 6 source, styles, dependency lockfile, and documentation listed above.
+
+### Technical decisions
+
+- Stage only the reviewed task 6 paths; preserve generated and local files.
+- Use the existing `main` branch and `origin` remote without force pushing.
+- No further application or dependency changes are needed for this handoff.
+
+### Validation
+
+- Fetch succeeded; `git rev-list --left-right --count HEAD...origin/main`
+  returned `0 0` before committing.
+- `git diff --check` and the credential-pattern/ignore checks passed.
+- Task 6 application and browser checks already passed; unchanged checks were
+  not repeated. The unit-test suite remains empty as previously documented.
+- No commands failed during handoff preparation.
+
+### Outstanding issues
+
+- Commit and push are pending; record the observed result after publication.
+
+### Next steps
+
+- Commit and push the reviewed task 6 changes, then record the result.

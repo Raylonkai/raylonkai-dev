@@ -35,12 +35,13 @@ build and is intended for local verification, not production hosting.
 
 ## Current scope
 
-The starter renders one minimal page. Linting, formatting, and test-runner setup
-are configured. Routing, styling, meaningful unit tests, and deployment
-configuration remain subsequent tasks. No backend is required.
+The site has five minimal pages, client-side navigation, a 404 view, and basic
+responsive styles. Linting, formatting, and test-runner setup are configured.
+Meaningful unit tests and deployment configuration remain subsequent tasks.
+No backend is required.
 
-`src/main.tsx` mounts React in strict mode; `src/App.tsx` composes the application
-and renders the starter view from `src/pages/Home.tsx`.
+`src/main.tsx` mounts React in strict mode and imports global styles. `src/App.tsx`
+selects page components through Wouter inside a shared `SiteLayout`.
 `tsconfig.json` checks browser code, while `tsconfig.node.json` separately
 checks Vite configuration with Node-compatible tooling types. Vite performs
 bundling; TypeScript checks types without emitting files.
@@ -49,6 +50,33 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for source responsibilities,
 component conventions, and guidance for adding experiments and journal content.
 Folders are created when real code needs them; the documented layout does not
 require empty scaffolding.
+
+## Routes and navigation
+
+| URL            | Page                             |
+| -------------- | -------------------------------- |
+| `/`            | Home                             |
+| `/about`       | About                            |
+| `/projects`    | Projects                         |
+| `/lab`         | Engineering laboratory           |
+| `/notes`       | Engineering journal              |
+| Any other path | 404 view with a return-home link |
+
+Home and the small 404 view load immediately. About, Projects, Lab, and Notes
+load on demand through React `lazy` and `Suspense`, with a loading status while
+their modules arrive. Navigation uses real links with browser history support.
+Wouter matches these routes case-insensitively and permits one trailing slash;
+canonical navigation links use lowercase paths without trailing slashes.
+
+The shared layout provides a keyboard skip link, one main landmark, active-page
+indicators, visible focus styles, document titles, and focus/scroll handling after
+pathname changes. Page components provide their content without another `<main>`.
+
+Vite serves direct route requests during development and local preview. Future
+production hosting must serve `index.html` for application paths so direct links
+and refreshes reach the router. The 404 view is a client-side result: a static
+SPA fallback generally returns HTTP 200 even for unknown page paths. Caddy setup
+and deployment details remain a separate task.
 
 ## Engineering conventions
 

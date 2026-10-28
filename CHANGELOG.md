@@ -8,3 +8,6 @@ activity is recorded in [the devlog](docs/DEVLOG.md).
 ### Added
 
 - Initial raylonkai.dev starter page describing the website's purpose.
+- Home, About, Projects, Lab, and Notes routes with shared navigation and a 404 view.
+- On-demand secondary pages, page titles, a keyboard skip link, active-page
+  indicators, route-change focus handling, and minimal responsive styles.

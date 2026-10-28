@@ -10,23 +10,43 @@ using strict TypeScript, Vite, and Bun, with static production output in `dist/`
 index.html
   -> src/main.tsx
     -> src/App.tsx
-      -> src/pages/Home.tsx
+      -> src/components/layout/SiteLayout.tsx
+        -> selected src/pages/* view
 ```
 
 `index.html` provides the document and root element. `main.tsx` mounts React with
-`StrictMode`. `App.tsx` composes the application; `Home.tsx` owns the starter
-page's content and main landmark. Moving the content into a page component
-preserves the rendered HTML and prepares a clear home for future route views.
+`StrictMode` and imports `src/styles/global.css`. `App.tsx` defines Wouter routes
+for Home, About, Projects, Lab, and Notes, followed by the unknown-path fallback.
+`SiteLayout.tsx` owns the shared header, navigation, and single main landmark.
+Pages provide their content without duplicating the main landmark.
 
-Only the starter view exists today. Client-side routing, shared navigation,
-additional pages, styling, and deployment configuration remain future tasks.
+The five views are deliberately minimal. Home and the small 404 view are eager
+imports; the other four pages use module-level React `lazy` imports inside a
+`Suspense` boundary. This keeps shared navigation mounted during loading and
+lets Vite emit separate route chunks. Loading has a semantic status message.
+
+Wouter provides client-side links and History API navigation without a larger
+route framework. The shared layout tracks the pathname to set the document title,
+mark the current navigation link, and move focus to main and scroll to the top
+after pathname changes. It does not forcibly move focus on initial page load.
+A skip link, native link semantics, visible focus styling, and wrapping navigation
+provide the initial accessibility baseline. The layout mirrors Wouter's default
+case-insensitive matching and optional single trailing slash for titles and
+active links. Canonical links use lowercase paths without a trailing slash.
+
+The pathless final route renders a 404 view with a home link. Static SPA hosting
+still needs an HTML fallback for direct requests; a client-side 404 view does not
+set an HTTP 404 status. See the [README route table](../README.md#routes-and-navigation).
+
+Content, interactive experiments, and production deployment remain future work.
 There is no backend, database, authentication system, or global state library.
 
 ## Source responsibilities
 
-Only `src/pages/` is needed beyond the existing source root today. The other
-locations below are conventions for future work, created when they have useful
-files. Do not add placeholder components or empty directories to match a diagram.
+`src/pages/`, `src/components/layout/`, and `src/styles/` currently contain code.
+The other locations below are conventions for future work, created when they
+have useful files. Do not add placeholder components or empty directories to
+match a diagram.
 
 | Location                 | Responsibility                                                          |
 | ------------------------ | ----------------------------------------------------------------------- |
@@ -53,7 +73,7 @@ This does not require a generic experiment framework.
 
 - Use functional components and PascalCase component filenames, such as `Home.tsx`.
 - Keep page components responsible for their page content. Let `App.tsx` compose
-  pages and, when introduced, routing and shared layout.
+  routing and shared layout.
 - Use a default export for a page component; prefer direct imports from its file.
   Add named exports for utilities or related types when needed. Avoid barrel files
   until they solve a concrete problem.
@@ -62,8 +82,7 @@ This does not require a generic experiment framework.
 - Use relative imports while paths remain clear. Add aliases only when the source
   layout makes them beneficial, with matching TypeScript and Vite configuration.
 - Preserve semantic landmarks, keyboard access, and visible focus when adding
-  interactive UI. The current Home owns `<main>`; if future shared layout owns it,
-  remove the page's duplicate landmark in the same change.
+  interactive UI. The shared layout owns `<main>`; pages must not duplicate it.
 
 ## Types, configuration, and tests
 
@@ -81,12 +100,14 @@ interaction need suitable checks beyond pure algorithm tests.
 
 Use the commands in the [README](../README.md) for validation. ESLint checks code
 rules, TypeScript checks types, Prettier controls formatting, and Vite creates
-the production build. No additional dependencies are needed for this organization.
+the production build. Wouter is the only added runtime routing dependency; no
+component library, global state library, or browser-test dependency is installed.
 
 ## Future extension points
 
-Routing can select page components without changing React's entry point. Journal
-content can adopt a format when publishing requirements are known; no Markdown
+New routes can add page components in `App.tsx` and navigation/title entries in
+`SiteLayout.tsx` without changing React's entry point. Journal content can adopt
+a format when publishing requirements are known; no Markdown
 processor or content framework is selected yet. Labs can introduce workers,
 WebAssembly, graphics, or networking integrations when an experiment requires
 them, with decisions and browser constraints documented as they arise.
