@@ -1227,3 +1227,188 @@ Record the observed successful publication of task 8 repository files.
 ### Next steps
 
 - Publish this outcome record, confirm synchronization, and await the next task.
+
+## 2026-10-28 20:26 IST — Complete documentation review
+
+### Objective
+
+Complete task 9 by checking the accumulated documentation against the implemented
+foundation, following the user's request to finish all remaining tasks.
+
+### Actions performed
+
+- Read `AGENTS.md`, README, architecture, deployment guide, changelog, Caddyfile,
+  source, configurations, and recent devlog entries; checked Git status and file list.
+  The working tree started clean on `main`.
+- Observed actual Asia/Kolkata system time at 20:24 IST before work and 20:26 IST
+  before these final records.
+- Corrected README's typecheck description to include the test environment.
+- Added an explicit pre-handoff command sequence and a repeatable manual browser
+  checklist, including the limits of unit and HTTP-only checks.
+- Reviewed deployment instructions against the prepared roots, shared asset store,
+  Caddy routing, cache policies, and explicitly pending native/server validation.
+- Confirmed the changelog already covers the user-facing routes and Vim keys.
+  No user-facing feature or release was added during this documentation review.
+
+### Files changed
+
+- `README.md`: accurate typecheck scope and repeatable verification workflow.
+- `docs/DEVLOG.md`: append review results while preserving previous entries.
+
+### Technical decisions
+
+- Keep existing documentation as the source of conventions rather than introducing
+  duplicate guides or empty architecture folders.
+- Distinguish completed repository preparation from unperformed production setup.
+- Keep historical entries and existing changelog releases unchanged. No dependency,
+  source, package-script, or Caddy configuration changes were necessary.
+
+### Validation
+
+- `bun run format` and `bun run format:check`: passed; supported files were already
+  formatted, and the permanent devlog remained excluded from automatic rewriting.
+- Local links resolved in README, AGENTS, changelog, architecture, and deployment
+  documents. Shell examples parsed using `zsh -n` without execution.
+- Existing devlog bytes matched HEAD before appending. `git diff --check` passed.
+- No validation commands failed during this review.
+
+### Outstanding issues
+
+- No documentation blocker remains. Caddy-native and live hosting checks remain
+  accurately marked as pending; Caddy is not installed in this environment.
+
+### Next steps
+
+- Complete final foundation verification and record the engineering handoff below.
+
+## 2026-10-28 20:26 IST — Complete foundation validation and final engineering handoff
+
+### Objective
+
+Complete tasks 10 and 11: verify the initialized foundation, record actual results
+and limits, and provide the final engineering summary without an automatic commit,
+push, deployment, or system change.
+
+### Actions performed
+
+- Ran `bun install --frozen-lockfile`, `bun run typecheck`, `bun run lint`,
+  `bun run test`, and `bun run build`; formatting checks are recorded above.
+- Ran `bun pm ls` to confirm installed direct dependencies and versions.
+- Started `bun run dev` and `bun run preview` with approved access, binding only
+  to loopback, plus isolated headless Firefox 158.0.1 with a temporary `/tmp` profile.
+- Reused the temporary browser smoke script for development and production preview;
+  no browser framework dependency or persistent test scaffold was introduced.
+- Checked script coverage, artifact references, lazy chunks, Git ignore behavior,
+  lockfile policy, documentation links, and shell examples.
+- Stopped both servers and the temporary browser after verification. Retrieved
+  the actual system time before writing the final outcome.
+
+### Files changed
+
+- `docs/DEVLOG.md`: final verification and session outcome. README is the only
+  other file changed in this final documentation/validation session.
+- `dist/`: regenerated ignored production output from existing source; not staged.
+
+### Technical decisions
+
+- Keep the tested stack: Bun 1.4.4, React/React DOM 19.3.1, TypeScript 6.0.3,
+  Vite 8.3.5, Wouter 3.13.0, ESLint 10.13.0, and Prettier 3.9.10, with their
+  already recorded supporting plugins and types. No dependencies changed.
+- Retain separate browser, tooling, and test type environments; relative imports;
+  minimal pages and layout; real unit coverage; lazy secondary views; and native
+  accessible navigation plus optional hjkl shortcuts.
+- Create future source folders only when real features need them. The repository
+  includes the requested permanent instructions, architecture and deployment guides,
+  changelog, and engineering record without unused framework layers.
+- Preserve the explicit no-auto-commit/push requirement for this final session.
+
+### Validation
+
+- Frozen-lockfile installation passed: checked 167 installs with no changes.
+- Typechecking passed for application, tooling, and tests. ESLint passed with zero
+  warnings. Both formatting scripts executed successfully.
+- Unit tests: 46 passed, 0 failed, 73 assertions across two files. No empty-suite
+  allowance remains in the test script.
+- Production build passed: 35 modules, four separate lazy route chunks, CSS,
+  HTML, and a 230.45 kB main JavaScript bundle (72.92 kB gzip) under `dist/`.
+- Firefox smoke runs passed against both development and production preview:
+  all five routes, direct navigation and refresh-style document loads, titles,
+  active links, one main/h1 per view, lazy module loading, unknown and malformed
+  paths, 404 recovery, same-document links, and browser Back/Forward.
+- Keyboard checks passed for the skip link, route-change focus, h/l page changes,
+  j/k 80px scrolling, switch disable/re-enable, boundaries, and unknown routes.
+  Inputs, textarea, editable content, ARIA controls, links, buttons, select, canvas,
+  experiment opt-out containers, shadow input, and selected text remained protected.
+  Modifier/composition/repeat/handled-event probes also passed within Firefox.
+- The 360px Home layout had no horizontal overflow. Neither browser run recorded
+  application JavaScript errors. Headless graphics/telemetry warnings and shutdown
+  channel diagnostics appeared in Firefox's process output; both checks succeeded.
+- Both servers and Firefox stopped via Ctrl+C with expected exit code 130.
+- All eight requested scripts are configured. Git ignores dependencies, build,
+  coverage, and private environment files while `.env.example` remains trackable;
+  no generated directories are tracked and no other package-manager lockfile exists.
+- Built HTML references existing assets; all four lazy chunks are present; no
+  symlinks or environment files were found in `dist/`.
+- Local documentation links and shell syntax checks passed; `git diff --check`
+  passed. Prior devlog history was unchanged before appending these entries.
+- No verification commands failed in this final session. Caddy was absent from
+  PATH, so its native formatter/adapter/validator and live HTTP/TLS behavior were
+  not tested. No production DNS, permissions, network, service, or release switch
+  was configured or verified.
+
+### Outstanding issues
+
+- Repository foundation work is complete. Before production use, install/configure
+  Caddy separately and perform the native and live checks in `docs/DEPLOYMENT.md`.
+- Firefox smoke validation is not a cross-browser or screen-reader audit.
+  Fullscreen suppression remains implemented but unexercised in the headless checks.
+- Source content is intentionally minimal; real projects, experiments, and journal
+  entries remain future product work, not unfinished initialization.
+- Final README and devlog updates remain uncommitted and unpushed; previous tasks
+  were published in their separately authorized handoffs.
+
+### Next steps
+
+- Final result: tasks 1–11 are complete within repository scope, with native Caddy
+  and actual hosting verification explicitly deferred to production setup.
+- Launch from `/home/raylon/raylonkai.dev` with `bun install --frozen-lockfile`
+  and `bun run dev`, then open `http://127.0.0.1:5173`.
+
+## 2026-10-29 23:49 IST — Prepare final documentation commit
+
+### Objective
+
+Commit the pending README and final foundation validation records as requested.
+The user requested a commit only; no push is authorized for this handoff.
+
+### Actions performed
+
+- Read `AGENTS.md`, reviewed both pending files, checked status and diffs, and
+  obtained actual system time in Asia/Kolkata.
+- Ran `git diff --check` and `bun run format:check`.
+- Verified the pending devlog additions preserve the existing committed history.
+
+### Files changed
+
+- `README.md`: previously completed typecheck clarification and browser checklist.
+- `docs/DEVLOG.md`: previous final validation entries plus this commit record.
+
+### Technical decisions
+
+- Stage only these two reviewed documentation files and retain all existing commits.
+- Do not push or repeat application tests for unchanged documentation. Previous
+  application and browser validation remains recorded above.
+
+### Validation
+
+- Whitespace, formatting, and append-only history checks passed.
+- Only the two intended documents were modified; no commands failed.
+
+### Outstanding issues
+
+- Commit is pending; its observed outcome will be recorded afterward.
+- Native Caddy and production hosting validation remain deferred as documented.
+
+### Next steps
+
+- Commit the reviewed documents and record the actual local result without pushing.

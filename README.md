@@ -21,7 +21,7 @@ Stop it with Ctrl+C.
 | Command                | Purpose                                                                 |
 | ---------------------- | ----------------------------------------------------------------------- |
 | `bun run dev`          | Start Vite with React Fast Refresh                                      |
-| `bun run typecheck`    | Check application and Vite configuration types                          |
+| `bun run typecheck`    | Check application, Vite configuration, and test types                   |
 | `bun run build`        | Typecheck, then compile the static site to `dist/`                      |
 | `bun run preview`      | Serve the built site at <http://127.0.0.1:4173>                         |
 | `bun run lint`         | Check JavaScript, TypeScript, React Hooks, and Fast Refresh conventions |
@@ -46,6 +46,7 @@ selects page components through Wouter inside a shared `SiteLayout`.
 `tsconfig.json` checks browser code, while `tsconfig.node.json` separately
 checks Vite configuration with Node-compatible tooling types. Vite performs
 bundling; TypeScript checks types without emitting files.
+`tsconfig.test.json` additionally checks tests with Bun's type environment.
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for source responsibilities,
 component conventions, and guidance for adding experiments and journal content.
@@ -130,6 +131,25 @@ if discovery unexpectedly finds no tests. Run `bun run test --coverage` for unit
 coverage; generated coverage artifacts are ignored. Pure unit tests do not prove
 DOM focus, scrolling, or typing behavior: verify those in a real browser when
 changing keyboard handling.
+
+Before handing off application changes, run:
+
+```sh
+bun run typecheck
+bun run lint
+bun run format:check
+bun run test
+bun run build
+```
+
+For browser verification, start `bun run dev` or build and run `bun run preview`.
+Open all five routes directly, refresh, follow navigation links, and use browser
+Back/Forward. Verify the unknown-path view, page titles, active links, keyboard
+skip link, and main-content focus. Enable Vim navigation and check `h/l`, `j/k`
+on scrollable content, typing in controls, and the disable switch. Check a narrow
+viewport as well. Unit tests and HTTP status checks alone do not establish these
+browser behaviors. Previous Firefox smoke results are recorded in the devlog;
+no permanent browser automation dependency is configured.
 
 Use relative imports for now: the current source layout does not benefit from
 aliases. Reassess when deeper modules make import paths cumbersome.
